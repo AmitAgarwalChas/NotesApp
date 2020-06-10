@@ -2,9 +2,11 @@ package com.example.notesapp;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -24,12 +26,24 @@ public abstract class NoteRoomDatabase extends RoomDatabase {
             synchronized (NoteRoomDatabase.class){
                 if(INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            NoteRoomDatabase.class, "note_database").build();
+                            NoteRoomDatabase.class, "note_database")
+                            .addCallback(sRoomDatabaseCallback)
+                            .build();
                 }
             }
         }
         return INSTANCE;
     }
 
+    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback(){
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            databaseWriteExecutor.execute( () -> {
+                NoteDAO dao = INSTANCE.noteDAO();
+                dao.deleteAll();
 
+            });
+        }
+    };
 }

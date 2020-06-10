@@ -39,11 +39,6 @@ public abstract class NoteRoomDatabase extends RoomDatabase {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-            databaseWriteExecutor.execute( () -> {
-                NoteDAO dao = INSTANCE.noteDAO();
-                dao.deleteAll();
-
-            });
         }
     };
 }

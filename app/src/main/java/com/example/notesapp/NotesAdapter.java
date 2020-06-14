@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,12 @@ import java.util.List;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
     private final LayoutInflater inflater;
-    private List<Note> notes;
+    private static List<Note> notes;
 
     public NotesAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
     }
+
 
     @NonNull
     @Override
@@ -40,6 +42,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         notifyDataSetChanged();
     }
 
+    public static Note getNote(int position){
+        return notes.get(position);
+    }
+
     @Override
     public int getItemCount() {
         if(notes != null) {
@@ -50,9 +56,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView noteItem;
+        LinearLayout lay;
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             noteItem = itemView.findViewById(R.id.note_item);
+            lay = itemView.findViewById(R.id.item_lay);
         }
     }
 }

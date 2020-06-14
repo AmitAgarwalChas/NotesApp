@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NoteViewModel noteViewModel;
     public static final int NEW_NOTE_ACTIVITY_REQUEST_CODE = 1;
+    public static Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +53,12 @@ public class MainActivity extends AppCompatActivity {
                                          int direction) {
                         int position = viewHolder.getAdapterPosition();
                         Note currNote = NotesAdapter.getNote(position);
-                        Toast.makeText(MainActivity.this, "Deleting " +
-                                currNote.getNote(), Toast.LENGTH_LONG).show();
+                        if(toast != null){
+                            toast.cancel();
+                        }
+                        toast = Toast.makeText(MainActivity.this, "Deleted " +
+                                currNote.getNote(), Toast.LENGTH_LONG);
+                        toast.show();
 
                         // Delete the word
                         noteViewModel.delete(currNote);
@@ -71,6 +76,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (toast != null)
+            toast.cancel();
+    }
+    
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if (toast != null)
+            toast.cancel();
+    }
+
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);

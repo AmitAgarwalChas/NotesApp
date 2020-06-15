@@ -28,4 +28,8 @@ public class NoteRepository {
     void delete(final Note note){
         NoteRoomDatabase.databaseWriteExecutor.execute( () -> noteDAO.delete(note) );
     }
+
+    void update(final Note note){
+        NoteRoomDatabase.databaseWriteExecutor.execute( () -> noteDAO.update(note) );
+    }
 }

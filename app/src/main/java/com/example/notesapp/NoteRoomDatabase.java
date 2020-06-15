@@ -12,13 +12,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Note.class}, version = 1, exportSchema = false)
+@Database(entities = {Note.class}, version = 2, exportSchema = false)
 public abstract class NoteRoomDatabase extends RoomDatabase {
 
     public abstract NoteDAO noteDAO();
 
     private static volatile NoteRoomDatabase INSTANCE;
-    private static final int NO_OF_THREADS = 4;
+    private static final int NO_OF_THREADS = 8;
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NO_OF_THREADS);
 
     static NoteRoomDatabase getDatabase(final Context context){

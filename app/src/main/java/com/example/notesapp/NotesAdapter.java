@@ -16,6 +16,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     private final LayoutInflater inflater;
     private static List<Note> notes;
+    private OnItemClickListener listener;
 
     public NotesAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
@@ -56,11 +57,24 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     public class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView noteItem;
-        LinearLayout lay;
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             noteItem = itemView.findViewById(R.id.note_item);
-            lay = itemView.findViewById(R.id.item_lay);
+
+            noteItem.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if(listener!=null && position!=RecyclerView.NO_POSITION){
+                    listener.onItemClick(notes.get(position));
+                }
+            });
         }
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(Note note);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
     }
 }
